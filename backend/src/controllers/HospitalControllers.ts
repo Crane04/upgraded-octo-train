@@ -6,9 +6,15 @@ import { get } from "lodash";
 
 class Hospital {
   static register = async (req: Request, res: Response): Promise<any> => {
-    const { email, password, name } = req.body;
+    const { email, password, name, type, address } = req.body;
 
-    const Hospital = await CreateHospital.run(email, name, password);
+    const Hospital = await CreateHospital.run(
+      email,
+      name,
+      password,
+      type,
+      address
+    );
     if (!Hospital) {
       ApiResponse.error(res, "Couldn't create account, try again", 400);
       return;
@@ -21,7 +27,6 @@ class Hospital {
     const Hospital = await LoginHospital.run(email, password);
 
     if (typeof Hospital === "object" && Hospital !== null) {
-      
       ApiResponse.success(res, "Hospital logged in successfully", Hospital);
       return;
     }

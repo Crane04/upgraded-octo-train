@@ -8,6 +8,8 @@ export type Hospital = {
     salt?: string;
     sessionToken?: string;
   };
+  type: string;
+  address: string;
 };
 
 const HospitalSchema = new mongoose.Schema<Hospital>({
@@ -26,6 +28,11 @@ const HospitalSchema = new mongoose.Schema<Hospital>({
     salt: { type: String, select: false },
     sessionToken: { type: String, select: false },
   },
+  type: {
+    type: String,
+    required: true,
+  },
+  address: { type: String, required: true },
 });
 
 export const HospitalModel = mongoose.model("Hospital", HospitalSchema);

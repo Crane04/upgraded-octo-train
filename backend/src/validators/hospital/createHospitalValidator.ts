@@ -15,6 +15,12 @@ const schema = {
     type: "string",
     min: 6,
   },
+  type: {
+    type: "string",
+  },
+  address: {
+    type: "string",
+  },
 };
 
 const v = new Validator({
@@ -42,7 +48,6 @@ const createHospitalValidator = async (
     return;
   }
   const { email } = req.body;
-  console.log(email)
 
   const HospitalExists = await getHospitalByEmail(email);
   if (HospitalExists) {

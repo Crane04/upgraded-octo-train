@@ -17,7 +17,9 @@ class CreateHospital {
   public static async run(
     email: string,
     name: string,
-    password: string
+    password: string,
+    type: string,
+    address: string
   ): Promise<Hospital> {
     const salt = random();
 
@@ -28,6 +30,8 @@ class CreateHospital {
         salt,
         password: authentication(salt, password),
       },
+      type,
+      address,
     });
   }
 }
