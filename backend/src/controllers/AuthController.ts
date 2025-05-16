@@ -21,7 +21,8 @@ class AuthController {
     const user = await LoginUser.run(email, password);
 
     if (typeof user === "object" && user !== null) {
-      
+      res.cookie("sessionToken", user.authentication.sessionToken);
+
       ApiResponse.success(res, "User logged in successfully", user);
       return;
     }

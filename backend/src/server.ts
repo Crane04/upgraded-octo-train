@@ -9,18 +9,21 @@ import routes from "./router/index";
 require("dotenv").config();
 const app = express();
 
-app.use(
-  cors({
-    credentials: true,
-  })
-);
+const corsOptions = {
+  origin: true,
+  methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
+  allowedHeaders: ["Content-Type", "Authorization"],
+  credentials: true,
+};
+
+app.use(cors(corsOptions));
 
 app.use(cookieParser());
 // app.use(express.urlencoded(true));
 app.use(express.json());
 
 const server = http.createServer(app);
-console.log()
+console.log();
 const MONGO_URL = process.env.MONGO_URL;
 const port = process.env.PORT;
 

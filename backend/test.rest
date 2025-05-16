@@ -4,8 +4,8 @@ post {{host}}/users/register
 Content-Type: application/json
 
 {
-    "username": "mayowa",
-    "email":"mayowayusuf3004@gmail.com",
+    "username": "b",
+    "email":"b@gmail.com",
     "password": "crane3004"
 }
 
@@ -27,7 +27,9 @@ Content-Type: application/json
 {
     "name": "mayowa",
     "email":"hospital@gmail.com",
-    "password": "crane3004"
+    "password": "crane3004",
+    "type": "public",
+    "address": "here"
 }
 ###
 post {{host}}/hospitals/login
@@ -37,3 +39,6 @@ Content-Type: application/json
     "email":"hospital@gmail.com",
     "password": "crane3004"
 }
+
+###
+get {{host}}/hospitals/get-user-profile/b

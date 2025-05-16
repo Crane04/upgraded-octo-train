@@ -4,6 +4,7 @@ import HospitalController from "../controllers/HospitalControllers";
 import loginHospitalValidator from "../validators/hospital/loginHospitalValidator";
 import createHospitalValidator from "../validators/hospital/createHospitalValidator";
 import { create } from "lodash";
+import { validateHospital } from "../middlewares/validateHospital";
 
 export default (router: express.Router) => {
   router.get(
@@ -20,5 +21,10 @@ export default (router: express.Router) => {
     "/hospitals/login",
     loginHospitalValidator,
     HospitalController.login
+  );
+  router.get(
+    "/hospitals/get-user-profile/:username",
+    validateHospital,
+    HospitalController.getUserProfile
   );
 };

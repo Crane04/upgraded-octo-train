@@ -3,6 +3,7 @@ import ApiResponse from "../helpers/ApiResponse";
 import CreateHospital from "../services/hospitals/createHospital";
 import LoginHospital from "../services/hospitals/loginHospital";
 import { get } from "lodash";
+import getUserProfileByUsername from "../services/profile/getUserProfileBySessionToken";
 
 class Hospital {
   static register = async (req: Request, res: Response): Promise<any> => {
@@ -24,10 +25,11 @@ class Hospital {
 
   static login = async (req: Request, res: Response): Promise<any> => {
     const { email, password } = req.body;
-    const Hospital = await LoginHospital.run(email, password);
+    const hospital = await LoginHospital.run(email, password);
 
-    if (typeof Hospital === "object" && Hospital !== null) {
-      ApiResponse.success(res, "Hospital logged in successfully", Hospital);
+    if (typeof hospital === "object" && hospital !== null) {
+      res.cookie("sessionToken", hospital.authentication.sessionToken);
+      ApiResponse.success(res, "Hospital logged in successfully", hospital);
       return;
     }
 
@@ -38,6 +40,14 @@ class Hospital {
     const Hospital = get(req, "identity"); //passed from middleware
 
     ApiResponse.success(res, "Hospital retrieved successfully", Hospital);
+  };
+
+  static getUserProfile = async (req: Request, res: Response): Promise<any> => {
+    const { username } = req.params;
+    console.log(username);
+    const user = getUserProfileByUsername(username);
+
+    return user;
   };
 }
 

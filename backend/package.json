@@ -1,7 +1,7 @@
 {
-  "name": "ticketing",
+  "name": "life link",
   "version": "1.0.0",
-  "description": "Host events, buy tickets.",
+  "description": "Life link",
   "main": "server.js",
   "scripts": {
     "start": "nodemon",

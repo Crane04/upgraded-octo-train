@@ -15,14 +15,21 @@ class LoginHospital {
       return false;
     }
     const expectedHash = authentication(hospital.authentication.salt, password);
-    console.log(expectedHash);
+
     if (hospital.authentication.password !== expectedHash) {
       return false;
     }
+
+    const newSessionToken = authentication(random(), hospital._id.toString());
+
+    hospital.authentication.sessionToken = newSessionToken;
+
+    await hospital.save();
+    
     const safeHospital = await getHospitalByEmail(email).select(
       "+authentication.sessionToken"
     );
-
+    console.log(safeHospital);
     return safeHospital;
   };
 }

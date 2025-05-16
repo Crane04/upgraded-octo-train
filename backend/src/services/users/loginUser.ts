@@ -15,10 +15,17 @@ class LoginUser {
       return false;
     }
     const expectedHash = authentication(user.authentication.salt, password);
-    console.log(expectedHash);
+
     if (user.authentication.password !== expectedHash) {
       return false;
     }
+
+    const newSessionToken = authentication(random(), user._id.toString());
+
+    user.authentication.sessionToken = newSessionToken;
+
+    await user.save();
+
     const safeUser = await getUserByEmail(email).select(
       "+authentication.sessionToken"
     );
