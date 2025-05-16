@@ -3,7 +3,7 @@ import ApiResponse from "../helpers/ApiResponse";
 import CreateHospital from "../services/hospitals/createHospital";
 import LoginHospital from "../services/hospitals/loginHospital";
 import { get } from "lodash";
-import getUserProfileByUsername from "../services/profile/getUserProfileBySessionToken";
+import getUserProfileByUsername from "../services/profile/getUserProfileByUsername";
 
 class Hospital {
   static register = async (req: Request, res: Response): Promise<any> => {
@@ -44,10 +44,16 @@ class Hospital {
 
   static getUserProfile = async (req: Request, res: Response): Promise<any> => {
     const { username } = req.params;
-    console.log(username);
-    const user = getUserProfileByUsername(username);
 
-    return user;
+    const user = await getUserProfileByUsername(username);
+
+    console.log(user);
+
+    return ApiResponse.success(
+      res,
+      "User Profile retrieved successfully",
+      user
+    );
   };
 }
 

@@ -14,7 +14,7 @@ post {{host}}/users/login
 Content-Type: application/json
 
 {
-    "email":"mayowayusuf3004@gmail.com",
+    "email":"b@gmail.com",
     "password": "crane3004"
 }
 ###
@@ -42,3 +42,6 @@ Content-Type: application/json
 
 ###
 get {{host}}/hospitals/get-user-profile/b
+
+###
+get {{host}}/users/profile

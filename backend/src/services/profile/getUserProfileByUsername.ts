@@ -5,12 +5,14 @@ const getUserProfileByUsername = async (username: string) => {
   // Find the user by username
   const user = await UserModel.findOne({ username });
 
+  console.log(user)
+
   if (!user) {
     return null; // or throw an error
   }
 
   // Find the profile linked to this user ID
-  const profile = await ProfileModel.findOne({ user: user._id }).populate("user", "-authentication"); // exclude sensitive fields
+  const profile = await ProfileModel.findOne({ user: user._id }).populate("user"); // exclude sensitive fields
 
   return profile;
 };

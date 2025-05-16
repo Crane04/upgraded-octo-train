@@ -3,6 +3,7 @@ import ApiResponse from "../helpers/ApiResponse";
 import CreateUser from "../services/users/createUser";
 import LoginUser from "../services/users/loginUser";
 import { get } from "lodash";
+import getUserProfileBySessionToken from "../services/profile/getUserProfileBySessionToken";
 
 class AuthController {
   static register = async (req: Request, res: Response): Promise<any> => {
@@ -34,6 +35,19 @@ class AuthController {
     const user = get(req, "identity"); //passed from middleware
 
     ApiResponse.success(res, "User retrieved successfully", user);
+  };
+
+  static getUserProfile = async (req: Request, res: Response): Promise<any> => {
+    const sessionToken =
+      req.cookies["sessionToken"] || req.headers.authorization.split(" ")[1];
+
+    const userProfile = await getUserProfileBySessionToken(sessionToken);
+
+    return ApiResponse.success(
+      res,
+      "User Profile retrieved successfully",
+      userProfile
+    );
   };
 }
 

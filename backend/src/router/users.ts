@@ -6,4 +6,5 @@ export default (router: express.Router) => {
   router.get("/users/retrieve", validateUser, AuthController.getUser);
   router.post("/users/register", AuthController.register);
   router.post("/users/login", AuthController.login);
+  router.get("/users/profile", validateUser, AuthController.getUserProfile);
 };
