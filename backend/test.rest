@@ -4,8 +4,8 @@ post {{host}}/users/register
 Content-Type: application/json
 
 {
-    "username": "b",
-    "email":"b@gmail.com",
+    "username": "c",
+    "email":"c@gmail.com",
     "password": "crane3004"
 }
 
@@ -45,3 +45,9 @@ get {{host}}/hospitals/get-user-profile/b
 
 ###
 get {{host}}/users/profile
+
+###
+put {{host}}/hospitals/update-user-profile/<username>
+Content-Type: application/json
+
+{"bloodGroup": "A+"}

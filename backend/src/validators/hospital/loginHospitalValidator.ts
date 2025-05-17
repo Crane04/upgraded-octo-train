@@ -39,7 +39,7 @@ const loginHospitalValidator = async (
   }
   console.log(req.body.email)
   const HospitalExists = await getHospitalByEmail(req.body.email);
-  console.log("HospitalExists", HospitalExists);
+
   if (!HospitalExists) {
     ApiResponse.error(res, "Invalid Credentials", 400);
     return;

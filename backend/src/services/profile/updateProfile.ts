@@ -1,0 +1,69 @@
+import { ProfileModel } from "../../db/profile";
+import { User, UserModel } from "../../db/users";
+import { Types } from "mongoose";
+
+interface UpdateProfileInput {
+  sessionToken: string | Types.ObjectId;
+  username: string;
+  address?: string;
+  gender?: "Male" | "Female" | "Other";
+  genotype?: string;
+  bloodGroup?: string;
+  disability?: string | null;
+  phoneNumber?: string;
+  dateOfBirth?: Date;
+  previousHospital?: string;
+  additionalNote?: string;
+}
+
+const updateUserProfile = async (input: UpdateProfileInput) => {
+  let user;
+
+  if (input.sessionToken) {
+    user = await UserModel.findOne({
+      "authentication.sessionToken": input.sessionToken,
+    });
+  } else if (input.username) {
+    user = await UserModel.findOne({
+      username: input.username,
+    });
+  }
+  console.log(user);
+  const profile = await ProfileModel.findOne({
+    user: user._id,
+  });
+
+  if (!profile) {
+    throw new Error("Profile not found");
+  }
+
+  // Update standard fields if provided
+  if (input.address) profile.address = input.address;
+  if (input.gender) profile.gender = input.gender;
+  if (input.genotype) profile.genotype = input.genotype;
+  if (input.bloodGroup) profile.bloodGroup = input.bloodGroup;
+  if (input.disability !== undefined) profile.disability = input.disability;
+  if (input.phoneNumber) profile.phoneNumber = input.phoneNumber;
+  if (input.dateOfBirth) profile.dateOfBirth = input.dateOfBirth;
+
+  // Append to previousHospitals if new entry is provided
+  if (input.previousHospital) {
+    profile.previousHospitals.push({
+      hospitalName: input.previousHospital,
+      dateVisited: new Date(),
+    });
+  }
+
+  // Append to additionalNotes if a new note is provided
+  if (input.additionalNote) {
+    profile.additionalNotes.push({
+      note: input.additionalNote,
+      date: new Date(),
+    });
+  }
+
+  await profile.save();
+  return profile;
+};
+
+export default updateUserProfile;
