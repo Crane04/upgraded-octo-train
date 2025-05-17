@@ -4,6 +4,7 @@ import CreateUser from "../services/users/createUser";
 import LoginUser from "../services/users/loginUser";
 import { get } from "lodash";
 import getUserProfileBySessionToken from "../services/profile/getUserProfileBySessionToken";
+import getAllProfiles from "../services/profile/getAllProfiles";
 
 class AuthController {
   static register = async (req: Request, res: Response): Promise<any> => {
@@ -47,6 +48,15 @@ class AuthController {
       res,
       "User Profile retrieved successfully",
       userProfile
+    );
+  };
+
+  static getAllUsers = async (req: Request, res: Response): Promise<any> => {
+    const users = await getAllProfiles();
+    return ApiResponse.success(
+      res,
+      "All Users Profile retrieved successfully",
+      users
     );
   };
 }

@@ -52,3 +52,5 @@ put {{host}}/hospitals/update-user-profile/<username>
 Content-Type: application/json
 
 {"bloodGroup": "A+"}
+###
+get {{host}}/users/all

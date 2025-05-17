@@ -15,4 +15,5 @@ export default (router: express.Router) => {
     updateProfileValidator,
     ProfileController.updateUserProfile
   );
+  router.get("/users/all", AuthController.getAllUsers);
 };
