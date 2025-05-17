@@ -8,6 +8,7 @@ export type User = {
     salt?: string;
     sessionToken?: string;
   };
+  fullname: string;
 };
 
 const UserSchema = new mongoose.Schema<User>({
@@ -26,6 +27,7 @@ const UserSchema = new mongoose.Schema<User>({
     salt: { type: String, select: false },
     sessionToken: { type: String, select: false },
   },
+  fullname: { type: String, required: true },
 });
 UserSchema.post("save", async function (doc) {
   try {

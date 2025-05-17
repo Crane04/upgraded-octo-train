@@ -5,9 +5,10 @@ post {{host}}/users/register
 Content-Type: application/json
 
 {
-    "username": "c",
-    "email":"c@gmail.com",
-    "password": "crane3004"
+    "username": "user4",
+    "email":"user4@gmail.com",
+    "password": "user4",
+    "fullname": "user4"
 }
 
 ####
@@ -19,7 +20,7 @@ Content-Type: application/json
     "password": "crane3004"
 }
 ###
-get {{host}}/api/users/all
+get {{host}}/users/all
 
 ###
 post {{host}}/hospitals/register

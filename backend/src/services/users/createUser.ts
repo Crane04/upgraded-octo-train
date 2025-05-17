@@ -17,7 +17,8 @@ class CreateUser {
   public static async run(
     email: string,
     username: string,
-    password: string
+    password: string,
+    fullname: string
   ): Promise<User> {
     const salt = random();
 
@@ -28,6 +29,7 @@ class CreateUser {
         salt,
         password: authentication(salt, password),
       },
+      fullname,
     });
   }
 }

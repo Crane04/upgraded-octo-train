@@ -8,9 +8,9 @@ import getAllProfiles from "../services/profile/getAllProfiles";
 
 class AuthController {
   static register = async (req: Request, res: Response): Promise<any> => {
-    const { email, password, username } = req.body;
+    const { email, password, username, fullname } = req.body;
 
-    const user = await CreateUser.run(email, username, password);
+    const user = await CreateUser.run(email, username, password, fullname);
     if (!user) {
       ApiResponse.error(res, "Couldn't create account, try again", 400);
       return;
