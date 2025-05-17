@@ -1,4 +1,5 @@
 @host=http://localhost:8080/api
+# @host=https://upgraded-octo-train.onrender.com/api
 
 post {{host}}/users/register
 Content-Type: application/json
@@ -36,8 +37,8 @@ post {{host}}/hospitals/login
 Content-Type: application/json
 
 {
-    "email":"hospital@gmail.com",
-    "password": "crane3004"
+    "email":"agegemedi@gmail.com",
+    "password": "agege12345"
 }
 
 ###

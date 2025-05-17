@@ -1,3 +1,4 @@
+import getHospitalBySessionToken from "../../services/hospitals/getHospitalBySessionToken";
 import { ProfileModel } from "../../db/profile";
 import { User, UserModel } from "../../db/users";
 import { Types } from "mongoose";
@@ -14,6 +15,7 @@ interface UpdateProfileInput {
   dateOfBirth?: Date;
   previousHospital?: string;
   additionalNote?: string;
+  hospital?: string;
 }
 
 const updateUserProfile = async (input: UpdateProfileInput) => {
@@ -28,7 +30,9 @@ const updateUserProfile = async (input: UpdateProfileInput) => {
       username: input.username,
     });
   }
-  console.log(user);
+  if (!user) {
+    return { error: "User doesnnt exist!" };
+  }
   const profile = await ProfileModel.findOne({
     user: user._id,
   });
@@ -48,10 +52,6 @@ const updateUserProfile = async (input: UpdateProfileInput) => {
 
   // Append to previousHospitals if new entry is provided
   if (input.previousHospital) {
-    profile.previousHospitals.push({
-      hospitalName: input.previousHospital,
-      dateVisited: new Date(),
-    });
   }
 
   // Append to additionalNotes if a new note is provided
@@ -59,6 +59,13 @@ const updateUserProfile = async (input: UpdateProfileInput) => {
     profile.additionalNotes.push({
       note: input.additionalNote,
       date: new Date(),
+    });
+  }
+  if (input.hospital) {
+    const hospital = await getHospitalBySessionToken(input.hospital);
+    profile.previousHospitals.push({
+      hospitalName: hospital.name,
+      dateVisited: new Date(),
     });
   }
 
