@@ -10,7 +10,7 @@ import os
 
 load_dotenv()
 client = MongoClient(os.getenv('MONGO_URI'))
-db = client['ticketing']
+db = client['test']
 profiles_collection = db['profiles']
 users_collection = db['users']
 
