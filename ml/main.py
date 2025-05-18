@@ -9,12 +9,10 @@ from dotenv import load_dotenv
 import os
 
 load_dotenv()
-client = MongoClient(os.getenv('MONGO_URI'))
+client = MongoClient(os.getenv('MONGO_URI'), tlsAllowInvalidCertificates=True)
 db = client['test']
 profiles_collection = db['profiles']
 users_collection = db['users']
-
-
 
 
 def get_images():
