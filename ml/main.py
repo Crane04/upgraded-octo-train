@@ -3,12 +3,15 @@ import cv2
 import numpy as np
 import requests
 app = Flask(__name__)
-from bson import ObjectId
 from pymongo import MongoClient
 from dotenv import load_dotenv
 import os
-
+from groq import Groq
 load_dotenv()
+
+groq_client = Groq(api_key= os.getenv('GROQ_API_KEY'))
+
+
 client = MongoClient(os.getenv('MONGO_URI'), tlsAllowInvalidCertificates=True)
 db = client['test']
 profiles_collection = db['profiles']
@@ -51,8 +54,6 @@ def compare_images():
 
     image_file = request.files['image']
     people = get_images()
-
-    print(people)
 
     try:
         # Convert the image file to a numpy array
@@ -169,6 +170,68 @@ def compare_images():
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
+MEDICAL_SYSTEM_PROMPT = """You are Dr. Llama, a clinical AI medical assistant. Respond with concise, factual medical information only.
+Format responses as:
+1. Definition (if applicable)
+2. Key facts
+3. Clinical recommendations
+Omit greetings, flattery, or non-medical commentary.
+If unsure, state "Insufficient medical evidence."""
 
+# Emergency keywords
+EMERGENCY_KEYWORDS = {
+    "emergency", "911", "urgent", "chest pain", "shortness of breath",
+    "severe pain", "bleeding", "stroke", "heart attack", "unconscious"
+}
+
+# Medical disclaimer
+MEDICAL_DISCLAIMER = "\n\nDisclaimer: This information is not a substitute for professional medical advice, diagnosis, or treatment."
+
+@app.route('/medical-chat', methods=['POST'])
+def medical_chat_completion():
+    try:
+        # Get the user message from the request
+        data = request.get_json()
+        user_message = data.get('message')
+        
+        if not user_message:
+            return jsonify({"error": "Message is required"}), 400
+
+        # Check for emergency keywords
+        emergency_flag = any(
+            keyword in user_message.lower() 
+            for keyword in EMERGENCY_KEYWORDS
+        )
+
+        # Create chat completion
+        chat_completion = groq_client.chat.completions.create(
+            messages=[
+                {"role": "system", "content": MEDICAL_SYSTEM_PROMPT},
+                {"role": "user", "content": user_message},
+            ],
+            model="llama3-70b-8192",
+            temperature=0.2,  # Lower for clinical precision
+            max_tokens=500    # Limit response length
+        )
+
+        # Extract and clean the response
+        response = chat_completion.choices[0].message.content.strip()
+        
+        # Add emergency notice if triggered
+        if emergency_flag:
+            response = (
+                "EMERGENCY WARNING: " + response +
+                "\n\n→ Seek immediate medical attention or call emergency services."
+                "\nDo not delay treatment based on this information."
+            )
+        
+        # Append standard medical disclaimer
+        response += MEDICAL_DISCLAIMER
+        
+        return jsonify({"response": response})
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+    
 if __name__ == '__main__':
     app.run(debug=True)
