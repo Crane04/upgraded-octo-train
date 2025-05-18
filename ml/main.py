@@ -54,6 +54,8 @@ def compare_images():
     image_file = request.files['image']
     people = get_images()
 
+    print(people)
+
     try:
         # Convert the image file to a numpy array
         image = cv2.imdecode(np.frombuffer(image_file.read(), np.uint8), cv2.IMREAD_COLOR)
