@@ -1,6 +1,8 @@
 import updateUserProfile from "../services/profile/updateProfile";
 import { Request, Response, NextFunction } from "express";
 import ApiResponse from "../helpers/ApiResponse";
+import { uploadToCloudinary } from "../utils/cloudinary";
+import updateProfilePicture from "../services/profile/updateProfilePicture";
 
 class ProfileController {
   static updateUserProfile = async (
@@ -40,6 +42,37 @@ class ProfileController {
       "User Profile updated successfully",
       profile
     );
+  };
+  static updateImage = async (req: Request, res: Response) => {
+    try {
+      const sessionToken =
+        req.cookies["sessionToken"] || req.headers.authorization.split(" ")[1];
+
+      if (!sessionToken) {
+        return ApiResponse.error(res, "Unauthenticated", 401);
+      }
+
+      if (!req.file) {
+        return ApiResponse.error(res, "No image uploaded", 400);
+      }
+
+      // Upload to Cloudinary
+      const uploadResult = await uploadToCloudinary(
+        req.file.path,
+        "profileImages"
+      );
+
+      // Update profile image
+      const updatedProfile = await updateProfilePicture({
+        image: uploadResult.url,
+        sessionToken,
+      });
+
+      return ApiResponse.success(res, "Profile image updated", updatedProfile);
+    } catch (error) {
+      console.error(error);
+      return ApiResponse.error(res, "Something went wrong", 500);
+    }
   };
 }
 

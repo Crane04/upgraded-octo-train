@@ -1,20 +1,24 @@
 import { ProfileModel } from "../../db/profile";
-import { UserModel } from "../../db/users"; // adjust path as needed
+import { UserModel } from "../../db/users";
 
-const getUserProfileByUsername = async (username: string) => {
-  // Find the user by username
-  const user = await UserModel.findOne({ username });
-
-  console.log(user)
+const getUserProfileByQuery = async (query: string) => {
+  // Try to find the user by username, email, or fullname
+  const user = await UserModel.findOne({
+    $or: [
+      { username: query },
+      { email: query },
+      { fullname: query }, // Ensure "fullname" exists in your User schema
+    ],
+  });
 
   if (!user) {
-    return null; // or throw an error
+    return null;
   }
 
-  // Find the profile linked to this user ID
-  const profile = await ProfileModel.findOne({ user: user._id }).populate("user"); // exclude sensitive fields
+  // Find the profile associated with this user
+  const profile = await ProfileModel.findOne({ user: user._id }).populate("user");
 
   return profile;
 };
 
-export default getUserProfileByUsername;
+export default getUserProfileByQuery;

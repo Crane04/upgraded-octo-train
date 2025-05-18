@@ -12,7 +12,7 @@ export const validateUser = async (
 ) => {
   try {
     const sessionToken =
-      req.cookies["sessionToken"] || req.headers.authorization.split(" ")[1];
+      req.cookies["sessionToken"] || req.headers.authorization?.split(" ")?.[1];
     if (!sessionToken) {
       ApiResponse.error(res, "User is unauthenticated", 401);
       return;

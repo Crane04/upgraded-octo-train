@@ -47,14 +47,14 @@ class Hospital {
 
     const user = await getUserProfileByUsername(username);
 
-    console.log(user);
-
     return ApiResponse.success(
       res,
       "User Profile retrieved successfully",
       user
     );
   };
+
+
 }
 
 export default Hospital;
