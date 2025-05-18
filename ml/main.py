@@ -7,6 +7,8 @@ from pymongo import MongoClient
 from dotenv import load_dotenv
 import os
 from groq import Groq
+from flask_cors import CORS 
+CORS(app) 
 load_dotenv()
 
 groq_client = Groq(api_key= os.getenv('GROQ_API_KEY'))
