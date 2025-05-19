@@ -18,5 +18,5 @@ post {{host}}/medical-chat
 Content-Type: application/json
 
 {
-    "message": "what to do if a woman needs to give birth in the middle of the night emergency"
+    "message": "what to do if a woman needs to give birth in the middle of the night"
 }
