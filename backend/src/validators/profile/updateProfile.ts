@@ -11,8 +11,10 @@ const schema = {
   phoneNumber: { type: "string", optional: true },
   dateOfBirth: { type: "date", convert: true, optional: true },
   image: { type: "string", optional: true },
-  previousHospital: { type: "string", optional: true }, // single string input
-  additionalNote: { type: "string", optional: true },   // single string input
+  previousHospital: { type: "string", optional: true },
+  additionalNote: { type: "string", optional: true },
+  allergy: { type: "string", optional: true },
+  newHistory: { type: "string", optional: true },
 };
 
 const v = new Validator({

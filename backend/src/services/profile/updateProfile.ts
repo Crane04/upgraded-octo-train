@@ -16,6 +16,8 @@ interface UpdateProfileInput {
   previousHospital?: string;
   additionalNote?: string;
   hospital?: string;
+  allergy?: string;
+  newHistory: string;
 }
 
 const updateUserProfile = async (input: UpdateProfileInput) => {
@@ -50,10 +52,6 @@ const updateUserProfile = async (input: UpdateProfileInput) => {
   if (input.phoneNumber) profile.phoneNumber = input.phoneNumber;
   if (input.dateOfBirth) profile.dateOfBirth = input.dateOfBirth;
 
-  // Append to previousHospitals if new entry is provided
-  if (input.previousHospital) {
-  }
-
   // Append to additionalNotes if a new note is provided
   if (input.additionalNote) {
     profile.additionalNotes.push({
@@ -61,6 +59,21 @@ const updateUserProfile = async (input: UpdateProfileInput) => {
       date: new Date(),
     });
   }
+
+  if (input.allergy) {
+    profile.allergies.push({
+      allergy: input.allergy,
+      date: new Date(),
+    });
+  }
+
+  if (input.newHistory) {
+    profile.medicalHistory.push({
+      history: input.newHistory,
+      date: new Date(),
+    });
+  }
+
   if (input.hospital) {
     const hospital = await getHospitalBySessionToken(input.hospital);
     profile.previousHospitals.push({

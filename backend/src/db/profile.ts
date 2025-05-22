@@ -10,6 +10,16 @@ export interface AdditionalNote {
   date?: Date;
 }
 
+export interface Allergy {
+  allergy: string;
+  date: Date;
+}
+
+export interface MedicalHistory {
+  history: string;
+  date: Date;
+}
+
 export interface Profile extends Document {
   user?: Types.ObjectId;
   address?: string;
@@ -22,6 +32,8 @@ export interface Profile extends Document {
   dateOfBirth?: Date;
   image?: string | null;
   additionalNotes?: AdditionalNote[];
+  allergies?: Allergy[];
+  medicalHistory: MedicalHistory[];
 }
 
 const ProfileSchema = new Schema<Profile>(
@@ -52,6 +64,18 @@ const ProfileSchema = new Schema<Profile>(
     additionalNotes: [
       {
         note: { type: String, required: true },
+        date: { type: Date, default: Date.now },
+      },
+    ],
+    allergies: [
+      {
+        allergy: { type: String, required: true },
+        date: { type: Date, default: Date.now },
+      },
+    ],
+    medicalHistory: [
+      {
+        history: { type: String, required: true },
         date: { type: Date, default: Date.now },
       },
     ],

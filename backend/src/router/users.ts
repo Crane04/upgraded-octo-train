@@ -19,9 +19,10 @@ export default (router: express.Router) => {
   );
   router.get("/users/all", validateHospital, AuthController.getAllUsers);
   router.put(
-    "/users/update-profile",
+    "/users/update-profile-image",
     validateUser,
-    upload.single("image"), 
+    upload.single("image"),
     ProfileController.updateImage
   );
+  // router.get("/users/online", validateUser, AuthController);
 };

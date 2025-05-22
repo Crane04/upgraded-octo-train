@@ -59,6 +59,10 @@ class AuthController {
       users
     );
   };
+
+  static isUserOnline = async (req: Request, res: Response): Promise<any> => {
+    return res.status(200).json({ isOnline: true });
+  };
 }
 
 export default AuthController;

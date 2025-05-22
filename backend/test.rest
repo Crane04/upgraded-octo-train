@@ -5,10 +5,10 @@ post {{host}}/users/register
 Content-Type: application/json
 
 {
-"username": "test",
-"email": "test@gmail.com",
-"password": "test",
-"fullname": "Testing Name"
+"username": "yusuf",
+"email": "yusuf@gmail.com",
+"password": "yusuf",
+"fullname": "yusuf"
 }
 
 ####
@@ -16,8 +16,8 @@ post {{host}}/users/login
 Content-Type: application/json
 
 {
-    "email": "test@gmail.com",
-    "password": "test"
+    "email": "yusuf@gmail.com",
+    "password": "yusuf"
 }
 ###
 get {{host}}/users/all
@@ -43,15 +43,15 @@ Content-Type: application/json
 }
 
 ###
-get {{host}}/hospitals/get-user-profile/mayowayusuf3004@gmail.com
+get {{host}}/hospitals/get-user-profile/test
 
 ###
 get {{host}}/users/profile
 
 ###
-put {{host}}/hospitals/update-user-profile/<username>
+put {{host}}/hospitals/update-user-profile/test
 Content-Type: application/json
 
-{"bloodGroup": "A+"}
+{"bloodGroup": "A+", "allergy": "Eba"}
 ###
 get {{host}}/users/all
