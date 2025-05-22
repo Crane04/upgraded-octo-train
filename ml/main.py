@@ -8,9 +8,7 @@ from dotenv import load_dotenv
 import os
 from groq import Groq
 from flask_cors import CORS 
-cors = CORS(app, origins="*", methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"], 
-            supports_credentials=True, allow_headers=["Content-Type", "Authorization"])
-CORS(app) 
+CORS(app, resources={r"/*": {"origins": "*"}})
 load_dotenv()
 
 groq_client = Groq(api_key= os.getenv('GROQ_API_KEY'))
