@@ -194,16 +194,24 @@ EMERGENCY_KEYWORDS = {
 
 # Medical disclaimer
 MEDICAL_DISCLAIMER = "\n\nDisclaimer: This information is not a substitute for professional medical advice, diagnosis, or treatment."
-
-@app.route('/medical-chat', methods=['POST'])
+@app.route('/medical-chat', methods=['POST', 'OPTIONS'])
 def medical_chat_completion():
     try:
+        if request.method == 'OPTIONS':
+            response = jsonify({})
+            response.headers.add('Access-Control-Allow-Origin', '*')
+            response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization')
+            response.headers.add('Access-Control-Allow-Methods', 'POST,OPTIONS')
+            return response
+
         # Get the user message from the request
         data = request.get_json()
         user_message = data.get('message')
         
         if not user_message:
-            return jsonify({"error": "Message is required"}), 400
+            response = jsonify({"error": "Message is required"})
+            response.headers.add('Access-Control-Allow-Origin', '*')
+            return response, 400
 
         # Check for emergency keywords
         emergency_flag = any(
@@ -223,23 +231,27 @@ def medical_chat_completion():
         )
 
         # Extract and clean the response
-        response = chat_completion.choices[0].message.content.strip()
+        response_data = chat_completion.choices[0].message.content.strip()
         
         # Add emergency notice if triggered
         if emergency_flag:
-            response = (
-                "EMERGENCY WARNING: " + response +
+            response_data = (
+                "EMERGENCY WARNING: " + response_data +
                 "\n\n→ Seek immediate medical attention or call emergency services."
                 "\nDo not delay treatment based on this information."
             )
         
         # Append standard medical disclaimer
-        response += MEDICAL_DISCLAIMER
+        response_data += MEDICAL_DISCLAIMER
         
-        return jsonify({"response": response})
+        response = jsonify({"response": response_data})
+        response.headers.add('Access-Control-Allow-Origin', '*')
+        return response
 
     except Exception as e:
-        return jsonify({"error": str(e)}), 500
+        response = jsonify({"error": str(e)})
+        response.headers.add('Access-Control-Allow-Origin', '*')
+        return response, 500
     
 if __name__ == '__main__':
     app.run(debug=True)
