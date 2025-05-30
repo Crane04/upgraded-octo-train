@@ -52,6 +52,6 @@ get {{host}}/users/profile
 put {{host}}/hospitals/update-user-profile/test
 Content-Type: application/json
 
-{"bloodGroup": "A+", "allergy": "Eba"}
+{"gender": "Male"}
 ###
 get {{host}}/users/all

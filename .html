@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>POST Request Example</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        textarea, input, button {
+            padding: 10px;
+            font-size: 16px;
+        }
+        #responseContainer {
+            border: 1px solid #ccc;
+            padding: 15px;
+            min-height: 100px;
+            background-color: #f9f9f9;
+        }
+        .status {
+            margin-top: 10px;
+            font-style: italic;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>POST Request Example</h1>
+        
+        <div>
+            <label for="url">Server URL:</label>
+            <input type="text" id="url" value="https://jsonplaceholder.typicode.com/posts" style="width: 100%;">
+        </div>
+        
+        <div>
+            <label for="requestData">Request Data (JSON):</label>
+            <textarea id="requestData" rows="6" style="width: 100%;">{
+    "title": "foo",
+    "body": "bar",
+    "userId": 1
+}</textarea>
+        </div>
+        
+        <button id="sendButton">Send POST Request</button>
+        
+        <div class="status" id="status"></div>
+        
+        <h2>Response:</h2>
+        <div id="responseContainer">
+            <em>Response will appear here...</em>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('sendButton').addEventListener('click', async function() {
+            const url = document.getElementById('url').value;
+            const requestData = document.getElementById('requestData').value;
+            const statusElement = document.getElementById('status');
+            const responseContainer = document.getElementById('responseContainer');
+            
+            // Validate inputs
+            if (!url) {
+                statusElement.textContent = 'Please enter a server URL';
+                return;
+            }
+            
+            let parsedData;
+            try {
+                parsedData = JSON.parse(requestData);
+            } catch (e) {
+                statusElement.textContent = 'Invalid JSON data';
+                return;
+            }
+            
+            try {
+                statusElement.textContent = 'Sending request...';
+                responseContainer.innerHTML = '<em>Waiting for response...</em>';
+                
+                // Send POST request
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(parsedData)
+                });
+                
+                // Check if request was successful
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
+                // Parse the response
+                const data = await response.json();
+                
+                // Display the response
+                statusElement.textContent = `Request successful (Status: ${response.status})`;
+                responseContainer.innerHTML = `<pre>${JSON.stringify(data, null, 2)}</pre>`;
+                
+            } catch (error) {
+                statusElement.textContent = 'Error: ' + error.message;
+                responseContainer.innerHTML = `<strong>Error:</strong> ${error.message}`;
+            }
+        });
+    </script>
+</body>
+</html>
