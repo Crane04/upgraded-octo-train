@@ -7,6 +7,7 @@ import { create } from "lodash";
 import { validateHospital } from "../middlewares/validateHospital";
 import updateProfileValidator from "../validators/profile/updateProfile";
 import ProfileController from "../controllers/ProfileController";
+import createDoctorValidator from "../validators/hospital/createDoctor";
 
 export default (router: express.Router) => {
   router.get(
@@ -18,6 +19,17 @@ export default (router: express.Router) => {
     "/hospitals/register",
     createHospitalValidator,
     HospitalController.register
+  );
+  router.post(
+    "/hospitals/create-doctor",
+    createDoctorValidator,
+    validateHospital,
+    HospitalController.createDoctor
+  );
+  router.get(
+    "/hospitals/get-doctors",
+    validateHospital,
+    HospitalController.getDoctors
   );
   router.post(
     "/hospitals/login",

@@ -55,3 +55,12 @@ Content-Type: application/json
 {"gender": "Male"}
 ###
 get {{host}}/users/all
+
+###
+post {{host}}/hospitals/create-doctor
+Content-Type: application/json
+
+{"fullName": "Tope", "username": "toppy", "email": "tope@gmail.com"}
+
+###
+get {{host}}/hospitals/get-doctors

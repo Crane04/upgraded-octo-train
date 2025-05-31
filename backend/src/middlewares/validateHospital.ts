@@ -11,6 +11,8 @@ export const validateHospital = async (
   try {
     const sessionToken =
       req.cookies["sessionToken"] || req.headers.authorization.split(" ")[1];
+
+    console.log(sessionToken);
     if (!sessionToken) {
       ApiResponse.error(res, "Hospital is unauthenticated", 401);
       return;
