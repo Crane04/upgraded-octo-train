@@ -60,7 +60,13 @@ get {{host}}/users/all
 post {{host}}/hospitals/create-doctor
 Content-Type: application/json
 
-{"fullName": "Tope", "username": "toppy", "email": "tope@gmail.com"}
+{"fullName": "femi", "username": "femo", "email": "femifemo@gmail.com"}
 
 ###
 get {{host}}/hospitals/get-doctors
+
+###
+post {{host}}/doctors/login
+Content-Type: application/json
+
+{"email": "femifemo@gmail.com", "password": "123456"}

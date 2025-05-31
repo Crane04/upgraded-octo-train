@@ -1,7 +1,7 @@
 import express from "express";
 import ApiResponse from "../../helpers/ApiResponse";
 import Validator from "fastest-validator";
-import getHospitalByEmail from "../../services/hospitals/getHospitalByEmail";
+import getDoctorByEmail from "../../services/doctors/getDoctorByEmail";
 
 const schema = {
   email: {
@@ -22,7 +22,7 @@ const v = new Validator({
   },
 });
 
-const loginHospitalValidator = async (
+const loginDoctorValidator = async (
   req: express.Request,
   res: express.Response,
   next: express.NextFunction
@@ -37,13 +37,13 @@ const loginHospitalValidator = async (
     ApiResponse.validationError(res, "Validation failed", errors);
     return;
   }
-  const HospitalExists = await getHospitalByEmail(req.body.email);
+  const doctorExists = await getDoctorByEmail(req.body.email);
 
-  if (!HospitalExists) {
+  if (!doctorExists) {
     ApiResponse.error(res, "Invalid Credentials", 400);
     return;
   }
   next();
 };
 
-export default loginHospitalValidator;
+export default loginDoctorValidator;
