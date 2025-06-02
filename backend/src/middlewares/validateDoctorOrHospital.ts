@@ -22,8 +22,6 @@ export const validateDoctorHospital = async (
     const hospital = await getHospitalBySessionToken(sessionToken);
     const doctor = await getDoctorBySessionToken(sessionToken);
 
-    console.log(hospital)
-    console.log(doctor)
     if (!hospital && !doctor) {
       ApiResponse.error(res, "User is unauthenticated", 401);
       return;
