@@ -68,14 +68,29 @@ class Hospital {
         return ApiResponse.error(res, "Hospital not authenticated", 401);
       }
 
-      const { fullName, username, email, password } = req.body;
+      const {
+        fullName,
+        username,
+        email,
+        password,
+        gender,
+        speciality,
+        bio,
+        dateOfBirth,
+        phoneNumber,
+      } = req.body;
 
       const doctor = await CreateDoctor.run(
         fullName,
         username,
         email,
         hospital?._id.toString(),
-        password
+        password,
+        gender,
+        phoneNumber,
+        speciality,
+        bio,
+        dateOfBirth
       );
 
       return ApiResponse.success(res, "Doctor created successfully", doctor);

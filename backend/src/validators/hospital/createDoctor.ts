@@ -28,6 +28,33 @@ const schema = {
       email: "Email must be a valid email address.",
     },
   },
+
+  gender: {
+    type: "string",
+    enum: ["Male", "Female"],
+    messages: {
+      required: "Gender is required.",
+      enum: "Gender must be either Male or Female.",
+    },
+  },
+  speciality: {
+    type: "string",
+    min: 3,
+    messages: {
+      required: "Speciality is required.",
+      stringMin: "Speciality must be at least 3 characters.",
+    },
+  },
+  phoneNumber: {
+    type: "number",
+    messages: {
+      required: "Phone number is required.",
+      number: "Phone number must be a valid number.",
+    },
+  },
+  bio: {
+    type: "string",
+  },
 };
 
 const v = new Validator();
@@ -49,7 +76,7 @@ const createDoctorValidator = async (
   }
 
   const { email, username } = req.body;
-  console.log(email, username)
+
   const doctorWithEmail = await getDoctorByEmail(email);
   if (doctorWithEmail) {
     return ApiResponse.error(res, "Doctor with this email already exists", 400);
@@ -63,7 +90,7 @@ const createDoctorValidator = async (
       400
     );
   }
-  console.log("hereeeee")
+  console.log("hereeeee");
   next();
 };
 

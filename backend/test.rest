@@ -5,10 +5,10 @@ post {{host}}/users/register
 Content-Type: application/json
 
 {
-"username": "yusuf",
-"email": "yusuf@gmail.com",
-"password": "yusuf",
-"fullname": "yusuf"
+"username": "admin",
+"email": "admin@gmail.com",
+"password": "admin",
+"fullname": "admin"
 }
 
 ####
@@ -57,10 +57,19 @@ Content-Type: application/json
 get {{host}}/users/all
 
 ###
-post {{host}}/hospitals/create-doctor
+POST {{host}}/hospitals/create-doctor
 Content-Type: application/json
 
-{"fullName": "femi", "username": "femo", "email": "femifemo@gmail.com"}
+{
+  "fullName": "testdoc",
+  "username": "testdoc",
+  "email": "testdoc@gmail.com",
+  "dateOfBirth": "1990-01-01T00:00:00.000Z",
+  "gender": "Male",
+  "speciality": "Cardiology",
+  "phoneNumber": 1234567890,
+  "bio": "Doctor Femi is a cardiologist"
+}
 
 ###
 get {{host}}/hospitals/get-doctors

@@ -5,6 +5,11 @@ export type Doctor = {
   username: string;
   email: string;
   hospital: mongoose.Types.ObjectId;
+  dateOfBirth?: Date;
+  gender: "Male" | "Female";
+  speciality: string;
+  phoneNumber: number;
+  bio?: string;
   authentication: {
     password: string;
     salt?: string;
@@ -26,6 +31,27 @@ const DoctorSchema = new mongoose.Schema<Doctor & Document>({
     type: String,
     required: true,
     unique: true,
+  },
+  dateOfBirth: {
+    type: Date,
+    required: false,
+  },
+  gender: {
+    type: String,
+    required: true,
+    enum: ["Male", "Female"],
+  },
+  speciality: {
+    type: String,
+    required: true,
+  },
+  phoneNumber: {
+    type: Number,
+    required: true,
+  },
+  bio: {
+    type: String,
+    required: false,
   },
   hospital: {
     type: mongoose.Schema.Types.ObjectId,

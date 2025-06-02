@@ -21,7 +21,12 @@ class CreateDoctor {
     username: string,
     email: string,
     hospitalId: string,
-    password: string = "123456"
+    password: string = "123456",
+    gender: "Male" | "Female",
+    phoneNumber: number,
+    speciality: string,
+    bio: string,
+    dateOfBirth: Date
   ): Promise<Omit<Doctor, "authentication">> {
     const hospital = await HospitalModel.findById(hospitalId);
     if (!hospital) {
@@ -36,6 +41,11 @@ class CreateDoctor {
       username,
       email,
       hospital: hospital._id,
+      gender,
+      phoneNumber,
+      speciality,
+      bio,
+      dateOfBirth,
       authentication: {
         salt,
         password: hashedPassword,
