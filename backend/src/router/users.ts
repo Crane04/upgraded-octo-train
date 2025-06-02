@@ -3,8 +3,8 @@ import { validateUser } from "../middlewares/validateUser";
 import AuthController from "../controllers/AuthController";
 import updateProfileValidator from "../validators/profile/updateProfile";
 import ProfileController from "../controllers/ProfileController";
-import { validateHospital } from "../middlewares/validateHospital";
 import upload from "../middlewares/multer";
+import { validateDoctorHospital } from "../middlewares/validateDoctorOrHospital";
 
 export default (router: express.Router) => {
   router.get("/users/retrieve", validateUser, AuthController.getUser);
@@ -17,12 +17,11 @@ export default (router: express.Router) => {
     updateProfileValidator,
     ProfileController.updateUserProfile
   );
-  router.get("/users/all", validateHospital, AuthController.getAllUsers);
+  router.get("/users/all", validateDoctorHospital, AuthController.getAllUsers);
   router.put(
     "/users/update-profile-image",
     validateUser,
     upload.single("image"),
     ProfileController.updateImage
   );
-  // router.get("/users/online", validateUser, AuthController);
 };
