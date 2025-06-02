@@ -3,8 +3,9 @@ import { validateUser } from "../middlewares/validateUser";
 import HospitalController from "../controllers/HospitalControllers";
 import loginHospitalValidator from "../validators/hospital/loginHospitalValidator";
 import createHospitalValidator from "../validators/hospital/createHospitalValidator";
-import { create } from "lodash";
+
 import { validateHospital } from "../middlewares/validateHospital";
+import { validateDoctorHospital } from "../middlewares/validateDoctorOrHospital";
 import updateProfileValidator from "../validators/profile/updateProfile";
 import ProfileController from "../controllers/ProfileController";
 import createDoctorValidator from "../validators/hospital/createDoctor";
@@ -44,8 +45,8 @@ export default (router: express.Router) => {
 
   router.put(
     "/hospitals/update-user-profile/:username",
-    validateHospital,
     updateProfileValidator,
+    validateDoctorHospital,
     ProfileController.updateUserProfileByHospital
   );
 };

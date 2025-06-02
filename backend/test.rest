@@ -52,7 +52,7 @@ get {{host}}/users/profile
 put {{host}}/hospitals/update-user-profile/test
 Content-Type: application/json
 
-{"gender": "Male"}
+{"gender": "Female", "address": "Nithub"}
 ###
 get {{host}}/users/all
 
@@ -78,4 +78,7 @@ get {{host}}/hospitals/get-doctors
 post {{host}}/doctors/login
 Content-Type: application/json
 
-{"email": "femifemo@gmail.com", "password": "123456"}
+{"email": "testdoc@gmail.com", "password": "123456"}
+
+
+

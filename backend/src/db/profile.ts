@@ -3,6 +3,7 @@ import { Document, Schema, model, Types } from "mongoose";
 export interface PreviousHospital {
   hospitalName?: string;
   dateVisited?: Date;
+  doctor?: string;
 }
 
 export interface AdditionalNote {
@@ -55,6 +56,7 @@ const ProfileSchema = new Schema<Profile>(
     previousHospitals: [
       {
         hospitalName: { type: String, required: true },
+        doctor: { type: String, required: false },
         dateVisited: { type: Date, default: Date.now },
       },
     ],

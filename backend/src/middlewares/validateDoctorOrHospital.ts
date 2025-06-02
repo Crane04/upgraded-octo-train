@@ -4,7 +4,7 @@ import getHospitalBySessionToken from "../services/hospitals/getHospitalBySessio
 import getDoctorBySessionToken from "../services/doctors/getDoctorBySessionToken";
 import ApiResponse from "../helpers/ApiResponse";
 
-export const validateHospital = async (
+export const validateDoctorHospital = async (
   req: express.Request,
   res: express.Response,
   next: express.NextFunction
@@ -13,21 +13,31 @@ export const validateHospital = async (
     const sessionToken =
       req.cookies["sessionToken"] || req.headers.authorization.split(" ")[1];
 
+    console.log(sessionToken);
     if (!sessionToken) {
-      ApiResponse.error(res, "Hospital is unauthenticated", 401);
+      ApiResponse.error(res, "User is unauthenticated", 401);
       return;
     }
 
     const hospital = await getHospitalBySessionToken(sessionToken);
+    const doctor = await getDoctorBySessionToken(sessionToken);
 
-    if (!hospital) {
-      ApiResponse.error(res, "Hospital is unauthenticated", 401);
+    console.log(hospital)
+    console.log(doctor)
+    if (!hospital && !doctor) {
+      ApiResponse.error(res, "User is unauthenticated", 401);
       return;
     }
-    merge(req, { identity: hospital });
+
+    if (hospital) {
+      merge(req, { identity: hospital, role: "hospital" });
+    } else if (doctor) {
+      merge(req, { identity: doctor, role: "doctor" });
+    }
 
     next();
   } catch (error) {
     console.error(error);
+    ApiResponse.error(res, "Internal Server Error", 500);
   }
 };

@@ -2,6 +2,9 @@ import getHospitalBySessionToken from "../../services/hospitals/getHospitalBySes
 import { ProfileModel } from "../../db/profile";
 import { User, UserModel } from "../../db/users";
 import { Types } from "mongoose";
+import getSessionToken from "../../services/general/getSessionToken";
+import { Hospital } from "../../db/hospitals";
+import { Doctor } from "../../db/doctors";
 
 interface UpdateProfileInput {
   sessionToken: string | Types.ObjectId;
@@ -75,11 +78,27 @@ const updateUserProfile = async (input: UpdateProfileInput) => {
   }
 
   if (input.hospital) {
-    const hospital = await getHospitalBySessionToken(input.hospital);
-    profile.previousHospitals.push({
-      hospitalName: hospital.name,
-      dateVisited: new Date(),
-    });
+    const user = await getSessionToken(input.hospital);
+    console.log(user);
+    if (user) {
+      if (user.type === "hospital") {
+        console.log("na hospital");
+        const hospital = user.user as Hospital;
+        profile.previousHospitals.push({
+          hospitalName: hospital.name,
+          dateVisited: new Date(),
+        });
+      } else if (user.type === "doctor") {
+        console.log("na doctor");
+        const hospitalName = user.hospitalName;
+        const doctor = user.user as Doctor;
+        profile.previousHospitals.push({
+          hospitalName,
+          doctor: doctor.fullName,
+          dateVisited: new Date(),
+        });
+      }
+    }
   }
 
   await profile.save();
