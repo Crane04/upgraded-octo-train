@@ -23,7 +23,7 @@ app.use(cookieParser());
 app.use(express.json());
 
 const server = http.createServer(app);
-console.log();
+
 const MONGO_URL = process.env.MONGO_URL;
 const port = process.env.PORT;
 
