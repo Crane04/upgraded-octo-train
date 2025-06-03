@@ -1,7 +1,9 @@
 import groq_client from "../utils/groq";
+import { GROQ_API_KEY } from "../utils/groq";
 
 const consultDoctor = async (convertedAudioToText: string) => {
-    const prompt = `
+  console.log(GROQ_API_KEY)
+  const prompt = `
     You are a medical assistant summarizing conversations between doctors and patients.
     
     Instructions:
@@ -17,7 +19,6 @@ const consultDoctor = async (convertedAudioToText: string) => {
     
     Summary:
     `.trim();
-    
 
   const chatCompletion = await groq_client.chat.completions.create({
     messages: [{ role: "user", content: prompt }],
