@@ -11,4 +11,10 @@ export default (router: express.Router) => {
     validateDoctorHospital,
     DoctorController.consultDoctor
   );
+
+  router.get(
+    "/doctors/get-consultations",
+    validateDoctorHospital,
+    DoctorController.getConsultations
+  );
 };

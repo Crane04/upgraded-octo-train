@@ -61,9 +61,9 @@ POST {{host}}/hospitals/create-doctor
 Content-Type: application/json
 
 {
-  "fullName": "testdoc",
-  "username": "testdoc",
-  "email": "testdoc@gmail.com",
+  "fullName": "testjdoc",
+  "username": "testiidoc",
+  "email": "testiidoc@gmail.com",
   "dateOfBirth": "1990-01-01T00:00:00.000Z",
   "gender": "Male",
   "speciality": "Cardiology",
@@ -85,3 +85,7 @@ post {{host}}/doctors/consultation
 Content-Type: application/json
 
 {"patient": "test", "conversation": " Hi doc I'm feeling really sick I've had a fever for the past two days yeah it's been really bad okay and I've also been having some trouble breathing what do you think it is well let's take a look I've been having some chest pain too okay I'll listen to your lungs and check your temperature"}
+
+###
+
+get {{host}}/doctors/get-consultations?username=test

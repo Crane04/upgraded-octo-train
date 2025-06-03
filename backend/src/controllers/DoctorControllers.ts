@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import LoginDoctor from "../services/doctors/login";
 import ApiResponse from "../helpers/ApiResponse";
 import CreateConsultation from "../services/consultation/createConsultation";
+import GetConsultations from "../services/consultation/getConsultations";
 
 class DoctorController {
   static login = async (req: Request, res: Response): Promise<any> => {
@@ -30,6 +31,26 @@ class DoctorController {
     );
 
     ApiResponse.success(res, "Consultation recorded successfully", response);
+  };
+
+  static getConsultations = async (
+    req: Request,
+    res: Response
+  ): Promise<any> => {
+    const sessionToken =
+      req.cookies["sessionToken"] || req.headers.authorization.split(" ")[1];
+
+    const { username } = req.query;
+
+    const consultations = await GetConsultations.get(
+      sessionToken,
+      typeof username === "string" ? username : undefined
+    );
+    ApiResponse.success(
+      res,
+      "Consultation fetched successfully",
+      consultations
+    );
   };
 }
 
