@@ -27,9 +27,9 @@ post {{host}}/hospitals/register
 Content-Type: application/json
 
 {
-    "name": "mayowa",
-    "email":"hospital@gmail.com",
-    "password": "crane3004",
+    "name": "myhosp",
+    "email":"myhosp@gmail.com",
+    "password": "myhosp",
     "type": "public",
     "address": "here"
 }
@@ -38,8 +38,8 @@ post {{host}}/hospitals/login
 Content-Type: application/json
 
 {
-    "email":"hospital@gmail.com",
-    "password": "crane3004"
+    "email":"myhosp@gmail.com",
+    "password": "myhosp"
 }
 
 ###
@@ -61,9 +61,9 @@ POST {{host}}/hospitals/create-doctor
 Content-Type: application/json
 
 {
-  "fullName": "testjdoc",
-  "username": "testiidoc",
-  "email": "testiidoc@gmail.com",
+  "fullName": "testdoc",
+  "username": "testdoc",
+  "email": "testdoc@gmail.com",
   "dateOfBirth": "1990-01-01T00:00:00.000Z",
   "gender": "Male",
   "speciality": "Cardiology",
