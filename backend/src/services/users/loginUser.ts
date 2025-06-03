@@ -1,6 +1,7 @@
 import getUserByEmail from "./getUserByEmail";
 import { authentication, random } from "../../helpers";
 import { User } from "../../db/users";
+import GetUserPack from "../pack/getPackByUser";
 
 class LoginUser {
   static run = async (
@@ -10,7 +11,7 @@ class LoginUser {
     const user = await getUserByEmail(email).select(
       "+authentication.salt +authentication.password"
     );
-    console.log(user);
+
     if (!user) {
       return false;
     }
@@ -29,6 +30,8 @@ class LoginUser {
     const safeUser = await getUserByEmail(email).select(
       "+authentication.sessionToken"
     );
+
+    // const userPack = await GetUserPack.getById(user._id.toString());
 
     return safeUser;
   };

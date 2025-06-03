@@ -1,14 +1,14 @@
 @host=http://localhost:8080/api
-# @host=https://upgraded-octo-train.onrender.com/api
+# @host=https://lifelink1-gold.vercel.app/api
 
 post {{host}}/users/register
 Content-Type: application/json
 
 {
-"username": "admin",
-"email": "admin@gmail.com",
-"password": "admin",
-"fullname": "admin"
+    "username": "ppp",
+    "email": "ppp@gmail.com",
+    "password": "ppp",
+    "fullname": "ppp"
 }
 
 ####
@@ -16,8 +16,8 @@ post {{host}}/users/login
 Content-Type: application/json
 
 {
-    "email": "yusuf@gmail.com",
-    "password": "yusuf"
+    "email": "tumi@gmail.com",
+    "password": "tumi12"
 }
 ###
 get {{host}}/users/all
@@ -89,3 +89,27 @@ Content-Type: application/json
 ###
 
 get {{host}}/doctors/get-consultations?username=test
+
+###
+post {{host}}/pack/create
+Content-Type: application/json
+
+{"name": "first-pack"}
+
+###
+post {{host}}/pack/join
+Content-Type: application/json
+
+{"id": "F2DFWJ"}
+
+###
+post {{host}}/pack/leave
+Content-Type: application/json
+
+{"id": "7APIOR"}
+
+####
+get {{host}}/pack/members/22KPW8
+
+###
+get {{host}}/pack/summarize-history/<username>?medicalIssue=blood+transfusion

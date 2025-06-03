@@ -1,12 +1,17 @@
 import { NextFunction, Request, Response } from "express";
 import Validator from "fastest-validator";
 import ApiResponse from "../../helpers/ApiResponse";
-import GetUserPackByName from "services/pack/getPackByName";
+import GetUserPack from "../../services/pack/getPack";
 
 const schema = {
   name: {
     type: "string",
-    minString: 6,
+    min: 6,
+    required: true,
+    messages: {
+      required: "Pack name is required.",
+      stringMin: "Pack name must be at least 6 characters.",
+    },
   },
 };
 
@@ -23,7 +28,8 @@ const createPackValidator = async (
   next: NextFunction
 ) => {
   const result = await v.validate(req.body, schema);
-
+  console.log(req.body);
+  console.log({ result });
   if (result !== true) {
     const errors = result.map((err) => ({
       field: err.field || "unknown",
@@ -33,7 +39,10 @@ const createPackValidator = async (
     return;
   }
   const { name } = req.body;
-  const packExists = await GetUserPackByName.run(name);
+  if (!name) {
+    ApiResponse.error(res, "Pack name cannot be empty", 400);
+  }
+  const packExists = await GetUserPack.byName(name);
   if (packExists) {
     ApiResponse.error(res, "Pack with this name exists already!", 400);
     return;

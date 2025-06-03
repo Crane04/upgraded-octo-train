@@ -6,7 +6,7 @@ const consultDoctor = async (convertedAudioToText: string) => {
     
     Instructions:
     - Read the entire conversation.
-    - Identify the main symptoms or concerns expressed by the patient.
+    - Identify the main symptoms oxr concerns expressed by the patient.
     - Include the doctor's key responses or actions (questions, diagnoses, suggestions).
     - Summarize clearly and concisely.
     - Do not include speaker labels or extra formatting.
