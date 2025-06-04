@@ -31,5 +31,5 @@ export default (router: express.Router) => {
 
   router.get("/pack", validateUser, PackControllers.getPack);
 
-  router.get("/pack/summarize-history/:username", PackControllers.getPackProfiles);
+  router.post("/pack/summarize-history", PackControllers.getPackProfiles);
 };

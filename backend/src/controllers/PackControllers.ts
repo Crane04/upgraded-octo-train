@@ -113,8 +113,7 @@ class PackControllers {
     res: Response
   ): Promise<any> => {
     try {
-      const username = req.params.username;
-      const medicalIssue = req.query.medicalIssue as string | undefined; // Optional medical issue parameter
+      const { username, medicalIssue } = req.body;
 
       const getUser = await getUserByUsername(username);
       if (!getUser) {
