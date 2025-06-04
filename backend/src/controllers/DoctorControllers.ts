@@ -3,6 +3,7 @@ import LoginDoctor from "../services/doctors/login";
 import ApiResponse from "../helpers/ApiResponse";
 import CreateConsultation from "../services/consultation/createConsultation";
 import GetConsultations from "../services/consultation/getConsultations";
+import CreateUser from "../services/users/createUser";
 
 class DoctorController {
   static login = async (req: Request, res: Response): Promise<any> => {
@@ -51,6 +52,17 @@ class DoctorController {
       "Consultation fetched successfully",
       consultations
     );
+  };
+
+  static createPatient = async (req: Request, res: Response): Promise<any> => {
+    const { email, username, fullname } = req.body;
+    const password = "123456";
+    const user = await CreateUser.run(email, username, password, fullname);
+    if (!user) {
+      ApiResponse.error(res, "Couldn't create account, try again", 400);
+      return;
+    }
+    ApiResponse.success(res, "User created successfully!", user);
   };
 }
 

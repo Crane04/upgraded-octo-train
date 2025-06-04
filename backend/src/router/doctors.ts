@@ -17,4 +17,10 @@ export default (router: express.Router) => {
     validateDoctorHospital,
     DoctorController.getConsultations
   );
+
+  router.post(
+    "/doctors/create-patient",
+    validateDoctorHospital,
+    DoctorController.createPatient
+  );
 };

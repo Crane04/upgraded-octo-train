@@ -123,3 +123,14 @@ post {{host}}/pack/summarize-history
 Content-Type: application/json
 
 {"username": "testlong", "medicalIssue": "headache"}
+
+###
+post {{host}}/doctors/create-patient
+Content-Type: application/json
+
+{
+    "username": "bayo",
+    "email": "bayo@gmail.com",
+    "password": "bayo",
+    "fullname": "bayo"
+}
