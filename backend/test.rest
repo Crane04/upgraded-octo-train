@@ -1,5 +1,5 @@
-# @host=http://localhost:8080/api
-@host=https://lifelink1-gold.vercel.app/api
+@host=http://localhost:8080/api
+# @host=https://lifelink1-gold.vercel.app/api
 
 post {{host}}/users/register
 Content-Type: application/json
@@ -27,19 +27,26 @@ post {{host}}/hospitals/register
 Content-Type: application/json
 
 {
-    "name": "myhosp",
-    "email":"myhosp@gmail.com",
-    "password": "myhosp",
+    "name": "saubana hospital",
+    "email":"yusufsaubana04@gmail.com",
+    "password": "saubana",
     "type": "public",
-    "address": "here"
+    "address": "Nithub"
+}
+###
+post {{host}}/hospitals/verify
+Content-Type: application/json
+
+{
+    "email":"yusufsaubana04@gmail.com"
 }
 ###
 post {{host}}/hospitals/login
 Content-Type: application/json
 
 {
-    "email":"myhosp@gmail.com",
-    "password": "myhosp"
+    "email":"yusufsaubana04@gmail.com",
+    "password": "saubana"
 }
 
 ###
@@ -112,4 +119,7 @@ Content-Type: application/json
 get {{host}}/pack/members/22KPW8
 
 ###
-get {{host}}/pack/summarize-history/<username>?medicalIssue=blood+transfusion
+post {{host}}/pack/summarize-history
+Content-Type: application/json
+
+{"username": "testlong", "medicalIssue": "headache"}

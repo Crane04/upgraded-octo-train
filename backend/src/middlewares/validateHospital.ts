@@ -24,6 +24,10 @@ export const validateHospital = async (
       ApiResponse.error(res, "Hospital is unauthenticated", 401);
       return;
     }
+    if (!hospital.verified) {
+      ApiResponse.error(res, "Hospital isn't verified", 401);
+      return;
+    }
     merge(req, { identity: hospital });
 
     next();

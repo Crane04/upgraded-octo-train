@@ -49,4 +49,6 @@ export default (router: express.Router) => {
     validateDoctorHospital,
     ProfileController.updateUserProfileByHospital
   );
+
+  router.post("/hospitals/verify", HospitalController.verifyHospital);
 };

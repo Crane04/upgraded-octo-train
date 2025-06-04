@@ -10,6 +10,7 @@ export type Hospital = {
   };
   type: string;
   address: string;
+  verified?: boolean;
 };
 
 const HospitalSchema = new mongoose.Schema<Hospital>({
@@ -33,6 +34,7 @@ const HospitalSchema = new mongoose.Schema<Hospital>({
     required: true,
   },
   address: { type: String, required: true },
+  verified: { type: Boolean, required: false },
 });
 
 export const HospitalModel = mongoose.model("Hospital", HospitalSchema);

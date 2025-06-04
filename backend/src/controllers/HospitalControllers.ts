@@ -7,6 +7,10 @@ import getUserProfileByUsername from "../services/profile/getUserProfileByUserna
 import CreateDoctor from "../services/hospitals/createDoctor";
 import getHospitalBySessionToken from "../services/hospitals/getHospitalBySessionToken";
 import getDoctors from "../services/doctors/getDoctors";
+import sendEmail from "../utils/mail";
+import verifyingMail from "../utils/verifyingMail";
+import getHospitalByEmail from "../services/hospitals/getHospitalByEmail";
+import verifiedMail from "../utils/verifiedMail";
 
 class Hospital {
   static register = async (req: Request, res: Response): Promise<any> => {
@@ -23,6 +27,12 @@ class Hospital {
       ApiResponse.error(res, "Couldn't create account, try again", 400);
       return;
     }
+    await sendEmail(
+      email,
+      "Account Verification Update",
+      "Your hospital's account is being verified",
+      verifyingMail
+    );
     ApiResponse.success(res, "Hospital created successfully!", Hospital);
   };
 
@@ -31,6 +41,10 @@ class Hospital {
     const hospital = await LoginHospital.run(email, password);
 
     if (typeof hospital === "object" && hospital !== null) {
+      if (!hospital.verified) {
+        ApiResponse.error(res, "Hospital is not verified yet!", 401);
+        return;
+      }
       res.cookie("sessionToken", hospital.authentication.sessionToken);
       ApiResponse.success(res, "Hospital logged in successfully", hospital);
       return;
@@ -107,6 +121,29 @@ class Hospital {
     const doctors = await getDoctors(sessionToken);
 
     return ApiResponse.success(res, "Doctors Fetched successfully", doctors);
+  };
+
+  static verifyHospital = async (req: Request, res: Response): Promise<any> => {
+    const { email } = req.body;
+
+    const hospital = await getHospitalByEmail(email);
+
+    hospital.verified = true;
+
+    await hospital.save();
+
+    sendEmail(
+      email,
+      "Account Verified",
+      "Your hospital's account has been verified",
+      verifiedMail
+    );
+
+    return ApiResponse.success(
+      res,
+      "Your hospital has been verified successfully!",
+      hospital
+    );
   };
 }
 

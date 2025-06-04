@@ -28,6 +28,10 @@ export const validateDoctorHospital = async (
     }
 
     if (hospital) {
+      if (!hospital.verified) {
+        ApiResponse.error(res, "Hospital isn't verified!", 401);
+        return;
+      }
       merge(req, { identity: hospital, role: "hospital" });
     } else if (doctor) {
       merge(req, { identity: doctor, role: "doctor" });
