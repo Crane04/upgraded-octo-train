@@ -16,7 +16,7 @@
             flex-direction: column;
             gap: 20px;
         }
-        textarea, input, button {
+        textarea, input, button, select {
             padding: 10px;
             font-size: 16px;
         }
@@ -31,24 +31,74 @@
             font-style: italic;
             color: #666;
         }
+        #imagePreview {
+            max-width: 100%;
+            max-height: 200px;
+            margin-top: 10px;
+            display: none;
+        }
+        .tab {
+            display: none;
+        }
+        .tab.active {
+            display: block;
+        }
+        .tab-buttons {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        .tab-button {
+            padding: 8px 16px;
+            background: #eee;
+            border: none;
+            cursor: pointer;
+        }
+        .tab-button.active {
+            background: #ddd;
+            font-weight: bold;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>POST Request Example</h1>
         
+        <div class="tab-buttons">
+            <button class="tab-button active" data-tab="jsonTab">JSON Data</button>
+            <button class="tab-button" data-tab="imageTab">Image Upload</button>
+        </div>
+        
         <div>
             <label for="url">Server URL:</label>
             <input type="text" id="url" value="https://jsonplaceholder.typicode.com/posts" style="width: 100%;">
         </div>
         
-        <div>
+        <div id="jsonTab" class="tab active">
             <label for="requestData">Request Data (JSON):</label>
             <textarea id="requestData" rows="6" style="width: 100%;">{
     "title": "foo",
     "body": "bar",
     "userId": 1
 }</textarea>
+        </div>
+        
+        <div id="imageTab" class="tab">
+            <label for="imageUpload">Upload Image:</label>
+            <input type="file" id="imageUpload" accept="image/*">
+            <img id="imagePreview" alt="Image preview">
+            
+            <div style="margin-top: 10px;">
+                <label for="imageName">Image Name (optional):</label>
+                <input type="text" id="imageName" placeholder="custom-name.jpg">
+            </div>
+            
+            <div style="margin-top: 10px;">
+                <label for="additionalData">Additional JSON Data (optional):</label>
+                <textarea id="additionalData" rows="3" style="width: 100%;">{
+    "description": "Sample image"
+}</textarea>
+            </div>
         </div>
         
         <button id="sendButton">Send POST Request</button>
@@ -62,50 +112,127 @@
     </div>
 
     <script>
+        // Tab switching functionality
+        document.querySelectorAll('.tab-button').forEach(button => {
+            button.addEventListener('click', () => {
+                // Remove active class from all buttons and tabs
+                document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
+                document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+                
+                // Add active class to clicked button and corresponding tab
+                button.classList.add('active');
+                const tabId = button.getAttribute('data-tab');
+                document.getElementById(tabId).classList.add('active');
+            });
+        });
+        
+        // Image preview functionality
+        document.getElementById('imageUpload').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    const preview = document.getElementById('imagePreview');
+                    preview.src = event.target.result;
+                    preview.style.display = 'block';
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+        
         document.getElementById('sendButton').addEventListener('click', async function() {
             const url = document.getElementById('url').value;
-            const requestData = document.getElementById('requestData').value;
             const statusElement = document.getElementById('status');
             const responseContainer = document.getElementById('responseContainer');
             
-            // Validate inputs
+            // Validate URL
             if (!url) {
                 statusElement.textContent = 'Please enter a server URL';
                 return;
             }
             
-            let parsedData;
-            try {
-                parsedData = JSON.parse(requestData);
-            } catch (e) {
-                statusElement.textContent = 'Invalid JSON data';
-                return;
-            }
+            // Determine which tab is active
+            const isJsonTabActive = document.getElementById('jsonTab').classList.contains('active');
             
             try {
                 statusElement.textContent = 'Sending request...';
                 responseContainer.innerHTML = '<em>Waiting for response...</em>';
                 
-                // Send POST request
-                const response = await fetch(url, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(parsedData)
-                });
+                let response;
+                
+                if (isJsonTabActive) {
+                    // Handle JSON request
+                    const requestData = document.getElementById('requestData').value;
+                    let parsedData;
+                    
+                    try {
+                        parsedData = JSON.parse(requestData);
+                    } catch (e) {
+                        statusElement.textContent = 'Invalid JSON data';
+                        return;
+                    }
+                    
+                    response = await fetch(url, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(parsedData)
+                    });
+                } else {
+                    // Handle image upload with FormData
+                    const fileInput = document.getElementById('imageUpload');
+                    const file = fileInput.files[0];
+                    
+                    if (!file) {
+                        statusElement.textContent = 'Please select an image file';
+                        return;
+                    }
+                    
+                    const formData = new FormData();
+                    formData.append('image', file, document.getElementById('imageName').value || file.name);
+                    
+                    // Add additional JSON data if provided
+                    const additionalData = document.getElementById('additionalData').value;
+                    if (additionalData.trim()) {
+                        try {
+                            const parsedAdditionalData = JSON.parse(additionalData);
+                            formData.append('data', JSON.stringify(parsedAdditionalData));
+                        } catch (e) {
+                            statusElement.textContent = 'Invalid additional JSON data';
+                            return;
+                        }
+                    }
+                    
+                    response = await fetch(url, {
+                        method: 'POST',
+                        body: formData
+                        // Note: Don't set Content-Type header when using FormData,
+                        // the browser will set it automatically with the correct boundary
+                    });
+                }
                 
                 // Check if request was successful
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
                 
-                // Parse the response
-                const data = await response.json();
+                // Try to parse the response as JSON, fall back to text if it fails
+                let data;
+                try {
+                    data = await response.json();
+                } catch (e) {
+                    data = await response.text();
+                }
                 
                 // Display the response
                 statusElement.textContent = `Request successful (Status: ${response.status})`;
-                responseContainer.innerHTML = `<pre>${JSON.stringify(data, null, 2)}</pre>`;
+                
+                if (typeof data === 'string') {
+                    responseContainer.innerHTML = `<pre>${data}</pre>`;
+                } else {
+                    responseContainer.innerHTML = `<pre>${JSON.stringify(data, null, 2)}</pre>`;
+                }
                 
             } catch (error) {
                 statusElement.textContent = 'Error: ' + error.message;

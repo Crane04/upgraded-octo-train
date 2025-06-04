@@ -6,7 +6,7 @@ import cv2
 import numpy as np
 import requests
 from .utils.get_images import profiles_collection
-from .utils.medical import MEDICAL_DISCLAIMER, MEDICAL_SYSTEM_PROMPT, EMERGENCY_KEYWORDS, groq_client
+from .utils.medical_question import get_medical_response
 from rest_framework.parsers import MultiPartParser, FormParser
 from bson import json_util
 import json
@@ -152,37 +152,8 @@ def medical_chat(request):
         if not user_message:
             return Response({"error": "Message is required"}, status=400)
 
-        # Check for emergency keywords
-        emergency_flag = any(
-            keyword in user_message.lower() 
-            for keyword in EMERGENCY_KEYWORDS
-        )
+        response = get_medical_response(user_message)
 
-        # Create chat completion
-        chat_completion = groq_client.chat.completions.create(
-            messages=[
-                {"role": "system", "content": MEDICAL_SYSTEM_PROMPT},
-                {"role": "user", "content": user_message},
-            ],
-            model="llama3-70b-8192",
-            temperature=0.2,  # Lower for clinical precision
-            max_tokens=500    # Limit response length
-        )
-
-        # Extract and clean the response
-        response = chat_completion.choices[0].message.content.strip()
-        
-        # Add emergency notice if triggered
-        if emergency_flag:
-            response = (
-                "EMERGENCY WARNING: " + response +
-                "\n\n→ Seek immediate medical attention or call emergency services."
-                "\nDo not delay treatment based on this information."
-            )
-        
-        # Append standard medical disclaimer
-        response += MEDICAL_DISCLAIMER
-        
         return Response({"response": response})
     except Exception as e:
         return Response({'error': str(e)}, status=500)
