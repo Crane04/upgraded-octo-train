@@ -26,6 +26,8 @@ class PackControllers {
 
   static joinPack = async (req: Request, res: Response): Promise<any> => {
     const { id } = req.body;
+
+    console.log("here oooo")
     const sessionToken =
       req.cookies["sessionToken"] || req.headers.authorization.split(" ")[1];
 

@@ -39,7 +39,7 @@ export default (router: express.Router) => {
   );
   router.get(
     "/hospitals/get-user-profile/:username",
-    validateHospital,
+    validateDoctorHospital,
     HospitalController.getUserProfile
   );
 

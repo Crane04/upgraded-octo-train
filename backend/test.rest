@@ -5,10 +5,10 @@ post {{host}}/users/register
 Content-Type: application/json
 
 {
-    "username": "ppp",
-    "email": "ppp@gmail.com",
-    "password": "ppp",
-    "fullname": "ppp"
+    "username": "mayowa",
+    "email": "mayowa@gmail.com",
+    "password": "mayowa",
+    "fullname": "mayowa"
 }
 
 ####
@@ -16,8 +16,8 @@ post {{host}}/users/login
 Content-Type: application/json
 
 {
-    "email": "tumi@gmail.com",
-    "password": "tumi12"
+    "email": "mayowa@gmail.com",
+    "password": "mayowa"
 }
 ###
 get {{host}}/users/all
@@ -101,7 +101,7 @@ get {{host}}/doctors/get-consultations?username=test
 post {{host}}/pack/create
 Content-Type: application/json
 
-{"name": "first-pack"}
+{"name": "nithub"}
 
 ###
 post {{host}}/pack/join

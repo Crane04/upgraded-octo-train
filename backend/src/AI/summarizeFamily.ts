@@ -47,3 +47,4 @@ const summarizeFamily = async (
 };
 
 export default summarizeFamily;
+
